@@ -11,23 +11,23 @@ const {
 app.use(express.json());
 
 /**
- * GET book - get detail of a book
- */
-app.get("/book", async (req, res, next) => {
-  const { id } = req.query;
-
-  const book = await getBook(id);
-
-  res.json(book);
-});
-
-/**
  * GET books - filter books
  */
 app.get("/books", async (req, res, next) => {
   const { title, country } = req.query;
 
   const book = await getBooks(title, country);
+
+  res.json(book);
+});
+
+/**
+ * GET book - get detail of a book
+ */
+app.get("/book/:id", async (req, res, next) => {
+  const { id } = req.params;
+
+  const book = await getBook(id);
 
   res.json(book);
 });
@@ -47,7 +47,7 @@ app.post("/book", async (req, res, next) => {
     year,
   } = req.body;
 
-  const book = await createBook({
+  await createBook({
     author,
     title,
     country,
@@ -80,7 +80,7 @@ app.put("/book/:id", async (req, res, next) => {
 
   const id = req.params.id;
 
-  const book = await updateBook(id, {
+  await updateBook(id, {
     author,
     title,
     country,
